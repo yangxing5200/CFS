@@ -140,6 +140,17 @@
     <Content Include="js\messages_zh.js" />
     <Content Include="js\messages_zh.min.js" />
     <Content Include="js\npm.js" />
+    <Content Include="test\css\style.css" />
+    <Content Include="test\img\bg.png" />
+    <Content Include="test\img\controls-bg.png" />
+    <Content Include="test\img\controls.png" />
+    <Content Include="test\img\handle.png" />
+    <Content Include="test\img\play.png" />
+    <Content Include="test\img\tooltip.png" />
+    <Content Include="test\index.html" />
+    <Content Include="test\js\mediaelement-and-player.min.js" />
+    <Content Include="test\media\cars.mp4" />
+    <Content Include="test\media\cars.png" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -172,6 +183,9 @@
     <Content Include="fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Home\Vedio.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

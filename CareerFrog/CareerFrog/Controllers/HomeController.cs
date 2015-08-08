@@ -16,5 +16,10 @@ namespace CareerFrog.Controllers
             return View();
         }
 
+        public ActionResult Vedio()
+        {
+            return View();
+        }
+
     }
 }
