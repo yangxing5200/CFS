@@ -22,38 +22,52 @@
 </head>
 <body>
     <div class="container">
+        <div class="row">
+            <div class="col-xs-12">
+                <form id="regform" method="POST" class="form-horizontal" role="form">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label no-padding-right" for="txt_name">姓名 </label>
+                        <div class="col-sm-9"><input type="text" id="txt_name" name="name" required="true" minlength="2" maxlength="20" autocomplete="on"></div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label no-padding-right" for="txt_school">学校 </label>
+                        <div class="col-sm-9"><input type="text" id="txt_school" name="school" required="true" minlength="2" maxlength="50" autocomplete="on" /></div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label no-padding-right" for="txt_graduation_date">毕业时间 </label>
+                        <div class="col-sm-9"><input type="month" id="txt_graduation_date" name="graduation_date" required="true" date="true" /></div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label no-padding-right" for="txt_name">手机号 </label>
+                        <div class="col-sm-9"><input type="text" id="txt_mobile" name="mobile" required="true" digits="true" maxlength="11" minlength="11" /></div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label no-padding-right" for="txt_name">邮箱 </label>
+                        <div class="col-sm-9"><input type="text" id="txt_email" name="email" required="true" email="true" /></div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label no-padding-right" for="txt_name">网申号 </label>
+                        <div class="col-sm-9"><input type="text" id="txt_no" name="no" digits="true" maxlength="6" minlength="6" placeholder="没有则不用填写" /></div>
+                    </div>
 
-        <form id="regform" method="POST" class="form-signin">
-            <section>
-                <div class="label">姓名 </div>
-                <input type="text" id="txt_name" name="name" required="true" minlength ="2" maxlength="20">
-            </section>
-            <section>
-                <div>学校 </div>
-                <input type="text" id="txt_school" name="school" required="true" minlength="2" maxlength="50" />
-            </section>
-            <section>
-                <div>毕业时间 </div>
-                <input type="date" id="txt_graduation_date" name="graduation_date" required="true" date="true" />
-            </section>
-            <section>
-                <div>手机号 </div>
-                <input type="text" id="txt_mobile" name="mobile" required="true" digits="true" maxlength="10" minlength="10" />
-            </section>
-            <section>
-                <div>邮箱 </div>
-                <input type="text" id="txt_email" name="email" required="true" email="true" />
-            </section>
-            <section>
-                <div>网申号 </div>
-                <input type="text" id="txt_no" name="no" digits="true" maxlength="6" minlength="6" />
-            </section>
-       
-            <section>
-               <input type="submit" value="submit"/>
-            </section>
-        </form>
+                    <div class="clearfix form-actions">
+                        <div class="col-md-offset-3 col-md-9">
+                            <button id="btnSubmit" class="btn btn-info" type="button">
+                                <i class="icon-ok bigger-110"></i>
+                                提交
+                            </button>
 
+                            &nbsp; &nbsp; &nbsp;
+                            <button class="btn" type="reset">
+                                <i class="icon-undo bigger-110"></i>
+                                重置
+                            </button>
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+        </div>
     </div> <!-- /container -->
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="//cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
@@ -61,11 +75,93 @@
     <script src="/js/bootstrap.min.js"></script>
     <script src="~/js/layer/layer.js"></script>
     <script src="http://libs.baidu.com/jquery/1.11.1/jquery.min.js"></script>
-   
-    <script src="~/js/jquery.validate.min.js" ></script>
+
+    <script src="~/js/jquery.validate.min.js"></script>
     <script src="~/js/messages_zh.js"></script>
     <script type="text/javascript">
         $("#regform").validate();
+        $('#btnSubmit').click(function () {
+            var layerIndex = 0;
+            var regOption = {
+                url: "/api/DbCommon?API=PreUserEdit",
+                type: 'get',
+                dataType: 'json',
+                data: {
+                    Name: $('#txt_name').val(),
+                    School: $('#txt_school').val(),
+                    GraduationDate: $('#txt_graduation_date').val(),
+                    Mobile: $('#txt_mobile').val(),
+                    Email: $('#txt_email').val(),
+                    No: $('#txt_no').val()
+                },
+
+                success: function (xhr) {
+                    console.log(xhr);
+                    if (xhr.Success) {
+                        layer.msg("注册成功", {
+                            icon: 1,
+                            time: 1000 //1秒关闭（如果不配置，默认是3秒）
+                        }, function () {
+                            location.href = "/Admin/User/Index";
+                        });
+                    }
+                }
+
+            };
+            var opt = {
+                url: "/api/DbCommon",
+                type: 'get',
+                dataType: 'json',
+                data: {
+                    API: 'GetPreUser',
+                    Mobile: $('#txt_mobile').val()
+                },
+                beforeSend: function () {
+                    layerIndex = layer.load('正在注册...');
+                },
+                success: function (xhr) {
+                    if (xhr.Success) {
+                        if (xhr.Count == 0) {
+                            $.ajax(regOption);
+                        } else {
+                            if (xhr.Count > 0 && (xhr.ApiParamObj[0].No == null || xhr.ApiParamObj[0].No.trim() == "")) {
+                                regOption.data.Id = xhr.ApiParamObj[0].Id;
+                                regOption.type = 'put';
+                                var param = { ApiParamObj: JSON.stringify(regOption.data) };
+                                regOption.data = param;
+                                $.ajax(regOption);
+                            } else {
+                                layer.alert("该手机号已经注册并绑定了网申号！");
+                            }
+                        }
+                    } else {
+                        layer.msg('与服务器通信出现错误');
+                    }
+                },
+                complate: function () {
+                    layer.close(layerIndex);
+                }, error: function () {
+                    layer.msg('error:please try again!');
+                }
+            };
+            if ($("#regform").valid() && validate) {
+                $.ajax(opt);
+            } else {
+                layer.alert('请填写完毕后再进行注册！');
+            }
+
+        });
+
+        function validate() {
+            if ($('#txt_name').val() == ""
+                || $('#txt_school').val() == ""
+                || $('#txt_graduation_date').val() == ""
+                || $('#txt_mobile').val() == ""
+                || $('#txt_email').val() == "") {
+                return false;
+            }
+            return true;
+        }
     </script>
 
 </body>

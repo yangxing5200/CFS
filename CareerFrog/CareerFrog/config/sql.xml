@@ -1,0 +1,76 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<APIROOT>
+
+  <API Name="GetAllUsers" Type="SQL">
+    <SQL>
+      <![CDATA[SELECT [Name]
+      ,[School]
+      ,[GraduationDate]
+      ,[Mobile]
+      ,[Email]
+      ,[No]
+      ,[CreateTime]
+  FROM    [dbo].[T_PreUsers]  ]]>
+    </SQL>
+    <Fields>
+      Name]
+      ,[School]
+      ,[GraduationDate]
+      ,[Mobile]
+      ,[Email]
+      ,[No]
+      ,[CreateTime]
+    </Fields>
+    <CONN>CONN</CONN>
+  </API>
+  <API Name="pagedquery" Type="PagedQuery">
+    <Table><![CDATA[ T_PreUsers ]]></Table>
+    <Fields>
+      Name
+      ,School
+      ,GraduationDate
+      ,Mobile
+      ,Email
+      ,No
+      ,CreateTime
+    </Fields>
+    <Where> <![CDATA[ AND Name LIKE '%'+[@param]+'%' or Mobile LIKE '%'+[@param]+'%' ]]></Where>
+    <CONN>CONN</CONN>
+  </API>
+  <API Name="PreUserEdit" Type="TableOp">
+    <TableName>T_PreUsers</TableName>
+    <KeyField>Id</KeyField>
+    <Fields>
+       [Id]
+      ,[Name]
+      ,[School]
+      ,[GraduationDate]
+      ,[Mobile]
+      ,[Email]
+      ,[No]
+      ,[CreateTime]
+    </Fields>
+    <Validations>
+      <Validate key="Name">NOTNULL</Validate>
+      <Validate key="School">NOTNULL</Validate>
+      <Validate key="GraduationDate">NOTNULL</Validate>
+      <Validate key="Mobile">NOTNULL</Validate>
+      <Validate key="Email">NOTNULL</Validate>
+    </Validations>
+    <Defaults>
+      <CreateTime DefVal="DateTimeNow"/>
+    </Defaults>
+    <CONN>CONN</CONN>
+  </API>
+
+  <API Name="GetPreUser" Type="SQL">
+    <SQL>
+      <![CDATA[SELECT Id,No
+  FROM    [dbo].[T_PreUsers] WHERE Mobile=[@Mobile]  ]]>
+    </SQL>
+    <Fields>
+     Id,No
+    </Fields>
+    <CONN>CONN</CONN>
+  </API>
+</APIROOT>
